@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADO - Sitio Oficial</title>
+    <link rel="stylesheet" href="../Css/Menu.css">
+    <link rel="icon" href="../Img/Icono.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <style>
+        /* Aplicar la fuente a toda la página */
+        body {
+            font-family: 'Lora', serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .info-box {
+            width: 300px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px auto;
+            text-align: center;
+            display: inline-block;
+            vertical-align: top;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .info-box img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .info-box h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .info-box p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        header {
+            background-color: #f2f2f2;
+            padding: 10px 0;
+        }
+
+        .logo-container {
+            max-width: 150px;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .menu-toggle {
+            text-align: right;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #ffffff;
+            text-align: center;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .menu li {
+            display: inline-block;
+            padding: 10px 20px;
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: #000000;
+            display: block;
+        }
+
+        .menu li a:hover {
+            background-color: #f2f2f2;
+        }
+
+        .logout-button {
+            background-color: #ffffff;
+            color: #ff0000;
+            border: 2px solid #ff0000;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        .logout-button:hover {
+            background-color: #ff0000;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        .logout-button:active {
+            background-color: #cc0000;
+            color: #ffffff;
+        }
+
+        .banner-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .banner {
+            flex: 1 1 300px;
+            max-width: 100%;
+            height: auto;
+            background-color: #f2f2f2;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+            margin-right: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .banner:last-child {
+            margin-right: 0;
+        }
+
+        .banner:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .banner .info-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .banner:hover .info-overlay {
+            opacity: 1;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 5px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            font-size: 12px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="../Img/Logo ADO.png" alt="ADO Logo" class="logo">
+            </div>
+            
+            <div class="menu-toggle">
+                <button class="toggle-btn">&#9776; Menú</button>
+                
+                <ul class="menu">
+                    <li><a href="https://www.ado.com.mx/horarios">Información</a></li>
+                    <li><a href="../Html/Menu.html">Salir</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="info-box">
+            <img src="../Img/Tampico.jpeg" alt="Imagen informativa">
+            <h2>Ciudad de Mexico-Tampico</h2>
+            <p>Tampico, una joya costera de México, combina playas de arena dorada y una rica herencia histórica. Sus pintorescas plazas y la vibrante vida marina hacen de esta ciudad un destino ideal para los amantes de la naturaleza y la cultura. Disfruta de su deliciosa gastronomía y encantadoras vistas al mar.</p>
+        
+        </div>
+
+        <div class="info-box">
+            <img src="../Img/Hidalgo.jpg" alt="Imagen informativa">
+            <h2>Ciudad de Mexico-Hidalgo</h2>
+            <p>Hidalgo, ubicado en el corazón de México, es conocido por su rica historia y belleza natural. Visita sus impresionantes prismas basálticos, pueblos mágicos y disfruta de la deliciosa gastronomía regional. Su cultura minera y encantadores paisajes montañosos te sorprenderán.</p>
+             
+        </div>
+        
+        <div class="info-box">
+            <img src="../Img/PACHUCA.jpg" alt="Imagen informativa">
+            <h2>Ciudad de Mexico-Pachuca</h2>
+            <p>Pachuca, la capital de Hidalgo, es famosa por su icónico Reloj Monumental y su rica historia minera. Disfruta de su arquitectura colonial, museos y parques, y deléitate con la deliciosa barbacoa y pastes tradicionales. Esta ciudad combina tradición y modernidad en un entorno acogedor.</p>
+            
+        </div>
+
+        <div class="info-box">
+            <img src="../Img/Reynosa.jpg" alt="Imagen informativa">
+            <h2>Ciudad de Mexico- Reynosa</h2>
+            <p>Reynosa, situada en la frontera con Estados Unidos, es una ciudad dinámica y en crecimiento. Conocida por su vibrante economía industrial y su riqueza cultural, ofrece una mezcla única de modernidad y tradiciones del norte de México. Disfruta de su gastronomía y hospitalidad.</p>
+            
+        </div>
+
+        <div class="info-box">
+            <img src="../Img/Matamoros.jpg" alt="Imagen informativa">
+            <h2>Ciudad de Mexico-Matamoros</h2>
+            <p>Matamoros, ubicada en la frontera con Texas, es una ciudad con una rica herencia cultural y una economía floreciente. Explora su centro histórico y disfruta de la auténtica cocina del norte de México.</p>
+            
+        </div>
+
+        <div class="info-box">
+            <img src="../Img/Grafo Ado.png" alt="Imagen informativa">
+            <h2>Grafo de Rutas de Camiones</h2>
+            <p>Representación de las rutas de camiones desde la central del norte hacia Tampico, Hidalgo, Pachuca, Reynosa y Matamoros.</p>
+            <button id="generate-pdf" class="logout-button">Generar PDF</button>
+            <div id="graph-container"></div>
+        </div>
+    </main>
+    <script>
+        const nodes = ['Central', 'Tampico', 'Hidalgo', 'Pachuca', 'Reynosa', 'Matamoros'];
+        const edges = [
+            ['Central', 'Tampico'],
+            ['Central', 'Hidalgo'],
+            ['Central', 'Pachuca'],
+            ['Central', 'Reynosa'],
+            ['Central', 'Matamoros'],
+        ];
+
+        const adjacencyMatrix = createAdjacencyMatrix(nodes, edges);
+        const incidenceMatrix = createIncidenceMatrix(nodes, edges);
+        const degrees = calculateDegrees(nodes, edges);
+
+        const destinations = ['Tampico', 'Hidalgo', 'Pachuca', 'Reynosa', 'Matamoros'];
+        const paths = {};
+        const shortestPaths = {};
+
+        destinations.forEach(destination => {
+            paths[destination] = findAllPaths('Central', destination, nodes, edges);
+            shortestPaths[destination] = findShortestPath('Central', destination, nodes, edges);
+        });
+
+        function createAdjacencyMatrix(nodes, edges) {
+            const matrix = Array(nodes.length).fill(null).map(() => Array(nodes.length).fill(0));
+            edges.forEach(([from, to]) => {
+                const fromIndex = nodes.indexOf(from);
+                const toIndex = nodes.indexOf(to);
+                if (fromIndex !== -1 && toIndex !== -1) {
+                    matrix[fromIndex][toIndex] = 1;
+                    matrix[toIndex][fromIndex] = 1;
+                }
+            });
+            return matrix;
+        }
+
+        function createIncidenceMatrix(nodes, edges) {
+            const matrix = Array(nodes.length).fill(null).map(() => Array(edges.length).fill(0));
+            edges.forEach(([from, to], index) => {
+                const fromIndex = nodes.indexOf(from);
+                const toIndex = nodes.indexOf(to);
+                if (fromIndex !== -1 && toIndex !== -1) {
+                    matrix[fromIndex][index] = 1;
+                    matrix[toIndex][index] = 1;
+                }
+            });
+            return matrix;
+        }
+
+        function calculateDegrees(nodes, edges) {
+            const degrees = Array(nodes.length).fill(0);
+            edges.forEach(([from, to]) => {
+                const fromIndex = nodes.indexOf(from);
+                const toIndex = nodes.indexOf(to);
+                if (fromIndex !== -1 && toIndex !== -1) {
+                    degrees[fromIndex] += 1;
+                    degrees[toIndex] += 1;
+                }
+            });
+            return degrees;
+        }
+
+        function findAllPaths(startNode, endNode, nodes, edges) {
+            const paths = [];
+            const visited = new Set();
+            function dfs(currentNode, path) {
+                visited.add(currentNode);
+                path.push(currentNode);
+                if (currentNode === endNode) {
+                    paths.push([...path]);
+                } else {
+                    edges.forEach(([from, to]) => {
+                        if (from === currentNode && !visited.has(to)) {
+                            dfs(to, path);
+                        } else if (to === currentNode && !visited.has(from)) {
+                            dfs(from, path);
+                        }
+                    });
+                }
+                path.pop();
+                visited.delete(currentNode);
+            }
+            dfs(startNode, []);
+            return paths;
+        }
+
+        function findShortestPath(startNode, endNode, nodes, edges) {
+            const distances = {};
+            const previous = {};
+            const queue = [];
+            nodes.forEach(node => {
+                distances[node] = Infinity;
+                previous[node] = null;
+            });
+            distances[startNode] = 0;
+            queue.push([startNode, 0]);
+            while (queue.length > 0) {
+                queue.sort((a, b) => a[1] - b[1]);
+                const [currentNode] = queue.shift();
+                edges.forEach(([from, to]) => {
+                    const neighbor = from === currentNode ? to : from === to ? from : null;
+                    if (neighbor) {
+                        const newDist = distances[currentNode] + 1;
+                        if (newDist < distances[neighbor]) {
+                            distances[neighbor] = newDist;
+                            previous[neighbor] = currentNode;
+                            queue.push([neighbor, newDist]);
+                        }
+                    }
+                });
+            }
+            const path = [];
+            let currentNode = endNode;
+            while (currentNode) {
+                path.unshift(currentNode);
+                currentNode = previous[currentNode];
+            }
+            return path;
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Página 1
+            doc.setFontSize(12);
+            doc.text('Lista de Adyacencia:', 10, 10);
+            nodes.forEach((node, index) => {
+                doc.text(`${node}: ${edges.filter(edge => edge.includes(node)).map(edge => edge.find(n => n !== node)).join(', ')}`, 10, 20 + index * 10);
+            });
+
+            doc.text('Matriz de Adyacencia:', 10, 80);
+            adjacencyMatrix.forEach((row, index) => {
+                doc.text(row.join(' '), 10, 90 + index * 10);
+            });
+
+            doc.addPage();
+
+            // Página 2
+            doc.setFontSize(12);
+            doc.text('Matriz de Incidencia:', 10, 10);
+            incidenceMatrix.forEach((row, index) => {
+                doc.text(row.join(' '), 10, 20 + index * 10);
+            });
+
+            doc.text('Grados de Nodos:', 10, 80);
+            degrees.forEach((degree, index) => {
+                doc.text(`${nodes[index]}: ${degree}`, 10, 90 + index * 10);
+            });
+
+            doc.addPage();
+
+            // Página 3
+            destinations.forEach((destination, destIndex) => {
+                const currentPaths = paths[destination];
+                const currentShortestPath = shortestPaths[destination];
+
+                doc.setFontSize(12);
+                doc.text(`Caminos desde Central a ${destination}:`, 10, 10 + destIndex * 60);
+                currentPaths.forEach((path, index) => {
+                    doc.text(path.join(' -> '), 10, 20 + destIndex * 60 + index * 10);
+                });
+
+                doc.setFontSize(12);
+                doc.text(`Camino más corto desde Central a ${destination}:`, 10, 30 + destIndex * 60 + currentPaths.length * 10);
+                doc.text(currentShortestPath.join(' -> '), 10, 40 + destIndex * 60 + currentPaths.length * 10);
+            });
+
+            doc.save('grafo.pdf');
+        }
+
+        document.getElementById('generate-pdf').addEventListener('click', generatePDF);
+    </script>
+</body>
+</html>

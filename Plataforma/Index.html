@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a ADO</title>
+    <link rel="stylesheet" href="./Css/Index.css">
+    <link rel="icon" href="../Plataforma/Img/Icono.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <img src="../Plataforma/Img/Logo ADO.png" alt="ADO Logo" class="logo">
+        <div  class="form-container">
+            <form action="C++/Login.php"  id="login-form" class="form" method="post">
+                <h2>Iniciar Sesión</h2>
+                <input id="email1" type="email" placeholder="Correo Electrónico" name="email1" required>
+                <input id="Pass1" type="password" placeholder="Contraseña" name="Pass1" required>
+                <button type="submit">Iniciar Sesión</button>
+                <p>¿No tienes una cuenta? <a href="#" onclick="showRegisterForm()">Regístrate</a></p>
+            </form>
+            
+            <form action="C++/Index.php" id="register-form" class="form hidden" method="post">
+                <h2>Registrarse</h2>
+                <input id="Nombre" type="text" name="Nombre" placeholder="Nombre" required>
+                <input id="email" type="email" name="email" placeholder="Correo Electrónico" required>
+                <input id="Pass" type="password" name="Pass" placeholder="Contraseña" required>
+                <button type="submit">Registrarse</button>
+                <p>¿Ya tienes una cuenta? <a href="#" onclick="showLoginForm()">Iniciar Sesión</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showRegisterForm() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+
+        function showLoginForm() {
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
+cd "C:\Users\FamLu\Downloads\Plataforma"
+
+cd "C:\Users\FamLu\Downloads\Plataforma"
+echo "# Plataforma" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Axlzme/Plataforma.git
+git push -u origin main
+

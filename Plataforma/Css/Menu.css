@@ -1,0 +1,106 @@
+/* Estilos para el cuerpo del documento */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Estilos para el encabezado */
+header {
+    background-color: #ffffff; /* Cambiado a blanco */
+    color: #333; /* Color de texto negro */
+    padding: 10px 0;
+}
+
+/* Estilos para el barra de navegación */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Estilos para el contenedor del logo */
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Estilos para el logo */
+.logo {
+    max-width: 80px; /* Ajusta el tamaño máximo del logo según sea necesario */
+    height: auto;
+    margin-right: 20px; /* Añade margen derecho para separar del menú */
+}
+
+/* Estilos para el menú desplegable */
+.menu-toggle {
+    position: relative;
+}
+
+.toggle-btn {
+    background-color: #ffffff; /* Cambiado a blanco */
+    color: #333; /* Color de texto negro */
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none; /* Elimina el borde */
+    transition: color 0.3s ease; /* Transición suave para el cambio de color */
+}
+
+.toggle-btn:hover {
+    color: #ff0000; /* Cambia el color del texto a naranja al pasar el cursor */
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    list-style-type: none;
+    padding: 10px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    right: 20px; /* Alineación a la derecha */
+}
+
+.menu li {
+    margin-bottom: 10px;
+}
+
+.menu li a {
+    color: #333; /* Color de texto negro por defecto */
+    text-decoration: none;
+}
+
+.menu li a:hover {
+    color: #ff0000; /* Cambia el color del texto a naranja al pasar el cursor */
+}
+
+.menu-toggle:hover .menu {
+    display: block;
+}
+
+/* Estilos para el contenido principal */
+main {
+    flex: 1; /* Ocupar todo el espacio restante */
+    padding: 20px;
+}
+
+/* Estilos para el pie de página */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+}
+
+/* Estilos para la leyenda de derechos reservados */
+.footer-notice {
+    margin-top: 20px; /* Espacio superior */
+}
