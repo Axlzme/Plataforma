@@ -8,6 +8,7 @@
     <link rel="icon" href="../Img/Icono.ico" type="image/x-icon">
     <!-- Enlace a Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         /* Aplicar la fuente a toda la página */
         body {
@@ -202,6 +203,7 @@
     </style>
 </head>
 <body>
+
     <header>
         <nav>
             <div class="logo-container">
@@ -269,6 +271,251 @@
             <button id="generate-pdf" class="logout-button">Generar PDF</button>
             <div id="graph-container"></div>
         </div>
+        </main>
 
+        <footer>
+            <p>Derechos reservados 2023 ADO S.A de C.V</p>
+        </footer>
+
+        <script>
+            // Lista de nodos (terminales y destinos)
+        const nodes = [
+            'Terminal del Norte', 
+            'Terminal Central La Tapo', 
+            'Istmo Tehuantepec', 
+            'Puebla', 
+            'Oaxaca', 
+            'Yucatán', 
+            'Texcoco', 
+            'Tlaxcala', 
+            'Acapulco'
+        ];
+
+        // Lista de aristas (conexiones entre terminales y destinos)
+        const edges = [
+            ['Terminal del Norte', 'Terminal Central La Tapo'],
+            ['Terminal Central La Tapo', 'Istmo Tehuantepec'],
+            ['Terminal Central La Tapo', 'Puebla'],
+            ['Terminal Central La Tapo', 'Oaxaca'],
+            ['Terminal Central La Tapo', 'Yucatán'],
+            ['Terminal Central La Tapo', 'Texcoco'],
+            ['Terminal Central La Tapo', 'Tlaxcala'],
+            ['Terminal Central La Tapo', 'Acapulco']
+        ];
+
+        // Crear matriz de adyacencia
+        function createAdjacencyMatrix(nodes, edges) {
+            const matrix = Array(nodes.length).fill(null).map(() => Array(nodes.length).fill(0));
+            edges.forEach(([from, to]) => {
+                const fromIndex = nodes.indexOf(from);
+                const toIndex = nodes.indexOf(to);
+                if (fromIndex !== -1 && toIndex !== -1) {
+                    matrix[fromIndex][toIndex] = 1;
+                    matrix[toIndex][fromIndex] = 1;
+                }
+            });
+            return matrix;
+        }
+
+        // Crear matriz de incidencia
+        function createIncidenceMatrix(nodes, edges) {
+            const matrix = Array(nodes.length).fill(null).map(() => Array(edges.length).fill(0));
+            edges.forEach(([from, to], index) => {
+                const fromIndex = nodes.indexOf(from);
+                const toIndex = nodes.indexOf(to);
+                if (fromIndex !== -1 && toIndex !== -1) {
+                    matrix[fromIndex][index] = 1;
+                    matrix[toIndex][index] = 1;
+                }
+            });
+            return matrix;
+        }
+
+        // Calcular grados de cada nodo
+        function calculateDegrees(nodes, edges) {
+            const degrees = Array(nodes.length).fill(0);
+            edges.forEach(([from, to]) => {
+                const fromIndex = nodes.indexOf(from);
+                const toIndex = nodes.indexOf(to);
+                if (fromIndex !== -1 && toIndex !== -1) {
+                    degrees[fromIndex] += 1;
+                    degrees[toIndex] += 1;
+                }
+            });
+            return degrees;
+        }
+
+        // Encontrar todos los caminos entre dos nodos usando DFS
+        function findAllPaths(startNode, endNode, nodes, edges) {
+            const paths = [];
+            const visited = new Set();
+            function dfs(currentNode, path) {
+                visited.add(currentNode);
+                path.push(currentNode);
+                if (currentNode === endNode) {
+                    paths.push([...path]);
+                } else {
+                    edges.forEach(([from, to]) => {
+                        if (from === currentNode && !visited.has(to)) {
+                            dfs(to, path);
+                        } else if (to === currentNode && !visited.has(from)) {
+                            dfs(from, path);
+                        }
+                    });
+                }
+                path.pop();
+                visited.delete(currentNode);
+            }
+            dfs(startNode, []);
+            return paths;
+        }
+
+        // Encontrar el camino más corto entre dos nodos usando BFS
+        function findShortestPath(startNode, endNode, nodes, edges) {
+            const distances = {};
+            const previous = {};
+            const queue = [];
+            nodes.forEach(node => {
+                distances[node] = Infinity;
+                previous[node] = null;
+            });
+            distances[startNode] = 0;
+            queue.push([startNode, 0]);
+            while (queue.length > 0) {
+                queue.sort((a, b) => a[1] - b[1]);
+                const [currentNode] = queue.shift();
+                edges.forEach(([from, to]) => {
+                    const neighbor = from === currentNode ? to : from === to ? from : null;
+                    if (neighbor) {
+                        const newDist = distances[currentNode] + 1;
+                        if (newDist < distances[neighbor]) {
+                            distances[neighbor] = newDist;
+                            previous[neighbor] = currentNode;
+                            queue.push([neighbor, newDist]);
+                        }
+                    }
+                });
+            }
+            const path = [];
+            let currentNode = endNode;
+            while (currentNode) {
+                path.unshift(currentNode);
+                currentNode = previous[currentNode];
+            }
+            return path;
+        }
+
+        // Generar matrices y calcular grados
+        const adjacencyMatrix = createAdjacencyMatrix(nodes, edges);
+        const incidenceMatrix = createIncidenceMatrix(nodes, edges);
+        const degrees = calculateDegrees(nodes, edges);
+
+        // Definir los destinos desde la terminal central
+        const destinations = [
+            'Istmo Tehuantepec', 
+            'Puebla', 
+            'Oaxaca', 
+            'Yucatán', 
+            'Texcoco', 
+            'Tlaxcala', 
+            'Acapulco'
+        ];
+        
+        // Encontrar todos los caminos y el camino más corto para cada destino
+        const paths = {};
+        const shortestPaths = {};
+        destinations.forEach(destination => {
+            paths[destination] = findAllPaths('Terminal Central La Tapo', destination, nodes, edges);
+            shortestPaths[destination] = findShortestPath('Terminal Central La Tapo', destination, nodes, edges);
+        });
+
+        function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const addPage = () => {
+        doc.addPage();
+        doc.setFontSize(12);
+        doc.setLineHeightFactor(1.2); // Ajustar el factor de altura de línea
+    };
+
+    // Página 1: Lista de Adyacencia, Matriz de Adyacencia y Matriz de Incidencia
+    doc.setFontSize(14);
+    doc.text('Grafo de Rutas', 10, 10);
+    doc.setFontSize(12);
+    doc.text('Lista de Adyacencia:', 10, 20);
+    
+    let yPosition = 30;
+    nodes.forEach((node, index) => {
+        let text = `${node}: ${edges.filter(edge => edge.includes(node)).map(edge => edge.find(n => n !== node)).join(', ')}`;
+        let splitText = doc.splitTextToSize(text, 180);
+        splitText.forEach((line, i) => {
+            doc.text(line, 10, yPosition);
+            yPosition += 10;
+        });
+    });
+
+    yPosition += 10;
+    doc.text('Matriz de Adyacencia:', 10, yPosition);
+    yPosition += 10;
+    adjacencyMatrix.forEach((row, index) => {
+        let text = row.join(' ');
+        let splitText = doc.splitTextToSize(text, 180);
+        splitText.forEach((line, i) => {
+            doc.text(line, 10, yPosition);
+            yPosition += 10;
+        });
+    });
+
+    yPosition += 10;
+    doc.text('Matriz de Incidencia:', 10, yPosition);
+    yPosition += 10;
+    incidenceMatrix.forEach((row, index) => {
+        let text = row.join(' ');
+        let splitText = doc.splitTextToSize(text, 180);
+        splitText.forEach((line, i) => {
+            doc.text(line, 10, yPosition);
+            yPosition += 10;
+        });
+    });
+
+    addPage();
+    yPosition = 10; // Resetear posición vertical para la nueva página
+    doc.text('Destinos y Caminos:', 10, yPosition);
+    yPosition += 10;
+
+    destinations.forEach(destination => {
+        doc.text(`Destino: ${destination}`, 10, yPosition);
+        yPosition += 10;
+        doc.text('Todos los caminos:', 10, yPosition);
+        yPosition += 10;
+        paths[destination].forEach(path => {
+            let text = path.join(' -> ');
+            let splitText = doc.splitTextToSize(text, 180);
+            splitText.forEach((line, i) => {
+                doc.text(line, 10, yPosition);
+                yPosition += 10;
+            });
+        });
+        yPosition += 10;
+        doc.text('Camino más corto:', 10, yPosition);
+        yPosition += 10;
+        let shortestPathText = shortestPaths[destination].join(' -> ');
+        let splitShortestPathText = doc.splitTextToSize(shortestPathText, 180);
+        splitShortestPathText.forEach((line, i) => {
+            doc.text(line, 10, yPosition);
+            yPosition += 10;
+        });
+        yPosition += 10;
+    });
+
+    doc.save('Grafo_de_Rutas_ADO.pdf');
+}
+
+
+
+        // Agregar evento al botón para generar el PDF
+        document.getElementById('generate-pdf').addEventListener('click', generatePDF);
+</script>
 </body>
 </html>

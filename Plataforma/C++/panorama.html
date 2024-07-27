@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADO - Sitio Oficial</title>
+    <link rel="stylesheet" href="../Css/Menu.css">
+    <link rel="icon" href="../Img/Icono.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Lora', serif; /* Fuente elegida */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilos para los cuadros */
+        .info-box {
+            width: 300px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px auto; /* Centrado horizontal */
+            text-align: center;
+            display: inline-block; /* Alinear en línea */
+            vertical-align: top; /* Alinear arriba */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra ligera */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
+        }
+
+        .info-box:hover {
+            transform: translateY(-5px); /* Efecto de levantamiento al pasar el ratón */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Sombra más pronunciada al pasar el ratón */
+        }
+
+        .info-box img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 8px; /* Bordes redondeados para la imagen */
+        }
+
+        .info-box h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #333; /* Color del título */
+        }
+
+        .info-box p {
+            font-size: 16px;
+            color: #666; /* Color del texto */
+        }
+
+        /* Estilos para la barra de navegación */
+        header {
+            background-color: #f2f2f2;
+            padding: 10px 0;
+        }
+
+        .logo-container {
+            max-width: 150px; /* Ancho máximo del logo */
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .menu-toggle {
+            text-align: right;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #ffffff; /* Fondo blanco */
+            text-align: center;
+            border: 1px solid #ccc; /* Borde ligero */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra ligera */
+        }
+
+        .menu li {
+            display: inline-block; /* Cambiado a inline-block para separar los elementos */
+            padding: 10px 20px; /* Más espacio alrededor de los elementos del menú */
+        }
+
+        .menu li a {
+            text-decoration: none;
+            color: #000000; /* Texto negro */
+            display: block; /* Asegura que el enlace ocupe todo el área del elemento */
+        }
+
+        .menu li a:hover {
+            background-color: #f2f2f2; /* Fondo claro al pasar el ratón */
+        }
+
+        .logout-button {
+            background-color: #ffffff; /* Fondo blanco */
+            color: #ff0000; /* Texto rojo */
+            border: 2px solid #ff0000; /* Borde rojo */
+            padding: 5px 10px; /* Relleno */
+            text-align: center; /* Alineación de texto */
+            text-decoration: none; /* Sin subrayado */
+            display: inline-block; /* Para alinearlo con otros elementos */
+            font-size: 14px; /* Tamaño de fuente */
+            cursor: pointer; /* Puntero de cursor */
+            border-radius: 5px; /* Bordes redondeados */
+            transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Transiciones suaves */
+        }
+
+        .logout-button:hover {
+            background-color: #ff0000; /* Fondo rojo al pasar el ratón */
+            color: #ffffff; /* Texto blanco */
+            transform: scale(1.05); /* Ampliar ligeramente el botón */
+        }
+
+        .logout-button:active {
+            background-color: #cc0000; /* Fondo más oscuro al hacer clic */
+            color: #ffffff; /* Texto blanco */
+        }
+
+        /* Estilos para los banners */
+        .banner-container {
+            display: flex;
+            justify-content: space-around; /* Espacio entre los banners */
+            flex-wrap: wrap; /* Permite envolver en filas si no hay suficiente espacio */
+            margin-top: 40px; /* Espacio arriba del contenedor */
+            margin-bottom: 20px; /* Espacio abajo del contenedor */
+        }
+
+        .banner {
+            flex: 1 1 300px; /* Ancho flexible pero máximo de 300px */
+            max-width: 100%; /* Máximo ancho permitido */
+            height: auto; /* Altura automática según el contenido */
+            background-color: #f2f2f2;
+            text-align: center; /* Centrar contenido */
+            position: relative; /* Posición relativa para contenido absoluto */
+            overflow: hidden; /* Oculta el desbordamiento */
+            margin-bottom: 20px; /* Espacio abajo */
+            margin-right: 20px; /* Espacio a la derecha entre banners */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra ligera */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
+        }
+
+        .banner:last-child {
+            margin-right: 0; /* Elimina el margen derecho del último banner */
+        }
+
+        .banner:hover {
+            transform: translateY(-5px); /* Efecto de levantamiento al pasar el ratón */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Sombra más pronunciada al pasar el ratón */
+        }
+
+        .banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px; /* Bordes redondeados para la imagen */
+        }
+
+        .banner .info-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 18px;
+            opacity: 0; /* Inicialmente oculto */
+            transition: opacity 0.3s ease; /* Transición de opacidad suave */
+        }
+
+        .banner:hover .info-overlay {
+            opacity: 1; /* Mostrar información al pasar el ratón */
+        }
+
+        /* Estilos para el pie de página */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 5px 0; /* Reducido el padding superior e inferior */
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            font-size: 12px; /* Tamaño de fuente reducido */
+            margin: 0; /* Eliminar margen para un mejor ajuste */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <!-- Logo de la empresa -->
+                <img src="../Img/Logo ADO.png" alt="ADO Logo" class="logo">
+            </div>
+            
+            <div class="menu-toggle">
+                <!-- Botón para alternar el menú -->
+                <button class="toggle-btn">&#9776; Menú</button>
+                
+                <!-- Menú de navegación -->
+                <ul class="menu">
+                    <li><a href="https://www.ado.com.mx/horarios">Información</a></li>
+                    <li><a href="../Html/Menu.html">Salir</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <main>
+            <!-- Contenido principal de la página -->
+            <div class="info-box">
+                <img src="../Img/tehuantepec.jpg" alt="Imagen informativa">
+                <h2>Ciudad de Mexico-Itsmo Tehantepec</h2>
+                <p>Tehuantepec, en Oaxaca, es una ciudad rica en cultura e historia, conocida por sus coloridos trajes tradicionales y vibrantes festividades. Su mercado ofrece una variedad de artesanías y comida típica que refleja la diversidad de la región. Además, la hospitalidad de su gente y sus paisajes pintorescos la convierten en un destino encantador para los visitantes.</p>
+            </div>
+    
+            <div class="info-box">
+                <img src="../Img/hangar.jpg" alt="Imagen informativa">
+                <h2>Hangar ADO</h2>
+                <p>El Hangar ADO es una de las instalaciones clave de la empresa, dedicada al mantenimiento y operación de su flota de autobuses. Equipado con tecnología avanzada y un equipo de profesionales altamente capacitados, garantiza el óptimo funcionamiento de los vehículos para asegurar viajes seguros y confortables para los pasajeros.</p>
+            </div>
+            <!-- Agregar más cajas de información según sea necesario -->
+    
+            <div class="banner-container">
+                <div class="banner">
+                    <img src="../Img/banner1.jpg" alt="Banner 1">
+                    <div class="info-overlay">Banner 1</div>
+                </div>
+                <div class="banner">
+                    <img src="../Img/banner2.jpg" alt="Banner 2">
+                    <div class="info-overlay">Banner 2</div>
+                </div>
+                <div class="banner">
+                    <img src="../Img/banner3.jpg" alt="Banner 3">
+                    <div class="info-overlay">Banner 3</div>
+                </div>
+            </div>
+        <div class="info-box">
+            img src="../Img/hangar.jpg" alt="Imagen informativa">
+            <h2>Hangar ADO</h2>
+            <p>El Hangar ADO es una de las instalaciones clave de la empresa, dedicada al mantenimiento y operación de su flota de autobuses. Equipado con tecnología avanzada y un equipo de profesionales altamente capacitados, garantiza el óptimo funcionamiento de los vehículos para asegurar viajes seguros y confortables para los pasajeros.</p>
+        </div>
+        <button id="generate-pdf">Generar PDF</button>
+    </main>
+    <script>
+        const pdfButton = document.getElementById('generate-pdf');
+
+        pdfButton.addEventListener('click', () => {
+            const doc = new jsPDF();
+            doc.text('Hola, mundo!', 10, 10);
+            doc.save('LE.pdf');
+        });
+    </script>
+    <footer>
+        <!-- ... (resto del código) ... -->
+    </footer>
+</body>
+</html>
+
